@@ -9,7 +9,7 @@ class Book{
 // creating class UI 
 class UI{
   static displayBooks() {
-    const books = Store.getBooks()
+    const books = storedBooks
     books.forEach((book) => UI.addBook(book));
   }
   static addBook(book){
@@ -49,37 +49,6 @@ class UI{
   }
 }
 
-// local storage 
-
-class Store{
-  static getBooks() {
-    let books;
-    if(localStorage.getItem('books' == null)){
-      books = []
-    }
-    else {
-      books = JSON.parse(localStorage.getItem('books'))
-    }
-    return books
-  }
-
-  static addBook(book){
-    let books = Store.getBooks()
-    books.push(book)
-    localStorage.setItem('books',JSON.stringify(books));
-  }
-  static remBook(isbn) {
-    const books = Store.getBooks();
-
-    books.forEach((book, index) => {
-      if(book.isbn === isbn) {
-        books.splice(index, 1);
-      }
-    });
-
-    localStorage.setItem('books', JSON.stringify(books));
-  }
-}
 
 // Event : Display books 
 document.addEventListener('DOMContentLoaded',UI.displayBooks)
@@ -103,7 +72,6 @@ document.querySelector('#book-form').addEventListener('submit',e=>{
 
   // adding book 
   UI.addBook(book)
-  Store.addBook(book)
 
   // clear fields 
   UI.clearFields()
@@ -113,7 +81,6 @@ document.querySelector('#book-form').addEventListener('submit',e=>{
 // delete book
 document.querySelector('#book-list').addEventListener('click',e=>{
   UI.deleteBook(e.target)
-  Store.remBook(e.target.parentElement.previousElementSibling.textContent);
   UI.showAlert('Book is removed', 'danger');
 }
 )
